@@ -1,19 +1,16 @@
-# PocketLinks - NextJS & TypeScript
+# SFC Calculator for ANA Mileage Members - NextJS & TypeScript
 
 ## 🌐 Project
 
-PocketLinks is a simple front-end web application designed to maintain a list of bookmarks
-(links), allowing users to add, edit, and delete links. The app is built using only front-end
-technologies (no backend database). The application relies on the use of redux and local
+SFC Calculator is a simple front-end web application designed to maintain a list of their flights and calculate the premium points, simulating the member status, allowing users to add, edit, and delete flight data. The app is built using only front-end technologies (temporally no backend database). The application relies on the use of redux and local
 storage to persist the user data.
 
-### 🏠 [Demo Link](https://pocket-links-nextjs-ts.vercel.app/)
+### 🏠 Demo link is coming soon!!✨
 
 ## ✨ Features
 
-- Provide a user-friendly interface for managing a list of bookmarks.
-- Enable adding, editing, and deleting bookmarks.
-- Validate URLs upon submission to ensure they are valid.
+- Provide a user-friendly interface for managing a list of flight plan.
+- Enable adding, editing, and deleting flight.
 - Implement pagination with 20 items per page
 
 ## 🔧 Installation and Setup
@@ -21,19 +18,24 @@ storage to persist the user data.
 Clone the repository
 
 ```
-git clone https://github.com/Gunnar50/pocket-links-nextjs-ts
+git clone https://github.com/FrancineHuang/ana-sfc-calc-nextjs-ts.git
 ```
 
 Navigate to the project directory
 
 ```
-cd pocket-links-nextjs-ts
+cd ana-sfc-calc-nextjs-ts
 ```
 
 Install dependecies
 
 ```
 npm install
+```
+or
+
+```
+npm i
 ```
 
 Start the development server
