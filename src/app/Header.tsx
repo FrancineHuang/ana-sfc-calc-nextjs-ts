@@ -32,7 +32,7 @@ function Header() {
 						</Button>
 					</div>
 
-					<Modal button={() => <Button>Add New Link</Button>} />
+					<Modal button={() => <Button>新規フライトを追加</Button>} />
 				</div>
 			</div>
 		</div>
