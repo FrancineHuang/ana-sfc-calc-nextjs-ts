@@ -7,7 +7,8 @@ import TableActions from "./table-actions";
 
 export const columns: ColumnDef<Bookmark>[] = [
 	{
-		header: "Title",
+    id: "boardingDate", 
+		header: "搭乗日",
 		size: 300,
 		cell: ({ row }) => {
 			return (
@@ -19,8 +20,117 @@ export const columns: ColumnDef<Bookmark>[] = [
 			);
 		},
 	},
+  {
+    id: "departure", 
+		header: "出発地",
+		size: 300,
+		cell: ({ row }) => {
+			return (
+				<div>
+					<p>東京 羽田</p>
+				</div>
+			);
+		},
+	},
+  {
+    id: "destination",
+		header: "目的地",
+		size: 300,
+		cell: ({ row }) => {
+			return (
+				<div>
+					<p>沖縄 那覇</p>
+				</div>
+			);
+		},
+	},
+  {
+    id: "flightNumber",
+		header: "便名",
+		size: 300,
+		cell: ({ row }) => {
+			return (
+				<div>
+					<p>NH477</p>
+				</div>
+			);
+		},
+	},
+  {
+    id: "ticketPrice",
+		header: "航空券代",
+		size: 300,
+		cell: ({ row }) => {
+			return (
+				<div>
+					<p>14,900</p>
+				</div>
+			);
+		},
+	},
+  {
+    id: "fareType",
+		header: "運賃種別",
+		size: 300,
+		cell: ({ row }) => {
+			return (
+				<div>
+					<p>SV75</p>
+				</div>
+			);
+		},
+	},
+  {
+    id: "otherExpenses",
+		header: "その他費用",
+		size: 300,
+		cell: ({ row }) => {
+			return (
+				<div>
+					<p>1,180円</p>
+				</div>
+			);
+		},
+	},
+  {
+    id: "earnedPP",
+		header: "獲得PP",
+		size: 300,
+		cell: ({ row }) => {
+			return (
+				<div>
+					<p>1,476</p>
+				</div>
+			);
+		},
+	},
+  {
+    id: "status",
+		header: "ステータス",
+		size: 300,
+		cell: ({ row }) => {
+			return (
+				<div>
+					<p>1,476</p>
+				</div>
+			);
+		},
+	},
+  {
+    id: "ppUnitPrice",
+		header: "PP単価",
+		size: 300,
+		cell: ({ row }) => {
+			return (
+				<div>
+					<p>10.09</p>
+				</div>
+			);
+		},
+	},
 	{
-		header: "Actions",
+    id: "action",
+		header: "",
 		size: 10,
 		cell: ({ row }) => {
 			return (
