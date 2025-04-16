@@ -17,17 +17,17 @@ function Header() {
 						alt="logo"
 						className="mr-2"
 					/>
-					<a href="/">SFC Calculator</a>
+					<a className="text-gray-50" href="/">SFC Calculator</a>
 				</div>
 				<div className="flex items-center gap-4">
 					<div className="flex">
 						<Button asChild variant="link">
 							<Link href="/overview">フライト一覧</Link>
 						</Button>
-						<Button variant="link">
+						<Button asChild variant="link">
 							<Link href="/howto">新規を追加</Link>
 						</Button>
-						<Button variant="link">
+						<Button asChild variant="link">
 							<Link href="/bin">ゴミ箱</Link>
 						</Button>
 					</div>
