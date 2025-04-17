@@ -26,9 +26,9 @@ import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import {
-	addBookmark,
-	editBookmark,
-} from "../lib/features/bookmarks/bookmarksSlice";
+	addFlight,
+  editFlight,
+} from "../lib/features/flights/flightsSlice";
 
 const formSchema = z.object({
   boardingDate: z.string().min(1, "搭乗日は必須です"),
@@ -48,7 +48,6 @@ const formSchema = z.object({
   status: z.string().optional(),
 });
 
-// MEMO: 之后需要把下面的类型定义砍掉，换成types定义的航班信息
 type FormData = z.infer<typeof formSchema>;
 
 
@@ -69,8 +68,8 @@ function Modal({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
 			boardingDate: flightData.boardingDate || "",
-			departure: flightData.departure || "東京 羽田",
-			destination: flightData.destination || "沖縄 那覇",
+			departure: flightData.departure || "",
+			destination: flightData.destination || "",
 			flightNumber: flightData.flightNumber || "",
 			ticketPrice: flightData.ticketPrice || undefined,
 			fareType: flightData.fareType || "",
@@ -82,13 +81,22 @@ function Modal({
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		const newId = id || uuidv4();
-		const newBookmark: Bookmark = { ...values, id: newId };
+    // Calculate the unit price of premium points
+    const totalCost = values.ticketPrice + (values.otherExpenses || 0);
+    const ppUnitPrice = totalCost / values.earnedPP;
+
+		const newFlight: Flight = { 
+      ...values, 
+      id: newId,
+      ppUnitPrice: Number(ppUnitPrice.toFixed(2))
+    };
+
 		if (id && id.trim() !== "") {
-			// edit exisitng bookmark
-			dispatch(editBookmark(newBookmark));
+			// edit exisitng flight
+			dispatch(editFlight(newFlight));
 		} else {
-			// add new bookmark
-			dispatch(addBookmark(newBookmark));
+			// add new flight
+			dispatch(addFlight(newFlight));
 			router.push("/results");
 		}
 
@@ -103,35 +111,156 @@ function Modal({
 					<DialogTitle className="mb-4"></DialogTitle>
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-							{/* TITLE INPUT */}
+							{/* 搭乗日 Boarding Date */}
 							<FormField
 								control={form.control}
-								name="alias"
+								name="boardingDate"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Title/Alias</FormLabel>
+										<FormLabel>搭乗日</FormLabel>
 										<FormControl>
-											<Input placeholder="Your Title..." {...field} />
+											<Input placeholder="例: 2025/04/20" {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
 
-							{/* URL INPUT */}
+							{/* 出発地 Departure */}
 							<FormField
 								control={form.control}
-								name="url"
+								name="departure"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>URL/Link</FormLabel>
+										<FormLabel>出発地</FormLabel>
 										<FormControl>
-											<Input placeholder="Your URL..." {...field} />
+											<Input placeholder="例: 東京 羽田" {...field} />
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
+
+              {/* 目的地 Destination */}
+							<FormField
+								control={form.control}
+								name="destination"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>目的地</FormLabel>
+										<FormControl>
+											<Input placeholder="例: 沖縄 那覇" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+              {/* 便名 Flight Number */}
+							<FormField
+								control={form.control}
+								name="destination"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>便名</FormLabel>
+										<FormControl>
+											<Input placeholder="例: NH477" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+              {/* 航空券代 Ticket Price */}
+							<FormField
+								control={form.control}
+								name="destination"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>航空券代</FormLabel>
+										<FormControl>
+											<Input 
+                        type="number"
+                        placeholder="例: 14900" 
+                        {...field} 
+                        onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
+                      />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+              {/* 運賃種別 Fare Type */}
+							<FormField
+								control={form.control}
+								name="fareType"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>運賃種別</FormLabel>
+										<FormControl>
+											<Input placeholder="例: SV75" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+              {/* その他費用 Ticket Price */}
+							<FormField
+								control={form.control}
+								name="destination"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>その他費用</FormLabel>
+										<FormControl>
+											<Input 
+                        type="number"
+                        placeholder="例: 1180" 
+                        {...field} 
+                        onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
+                      />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+              {/* 獲得PP Earned Premium Points */}
+							<FormField
+								control={form.control}
+								name="earnedPP"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>獲得PP</FormLabel>
+										<FormControl>
+											<Input 
+                        type="number"
+                        placeholder="例: 1476" 
+                        {...field} 
+                        onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
+                      />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
+              {/* ステータス Status */}
+							<FormField
+								control={form.control}
+								name="status"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>ステータス</FormLabel>
+										<FormControl>
+											<Input placeholder="例: 未 / 済" {...field} />
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+
 							<Button type="submit">Submit</Button>
 						</form>
 					</Form>
