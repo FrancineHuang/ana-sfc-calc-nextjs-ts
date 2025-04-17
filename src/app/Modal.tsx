@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import {
 	Dialog,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from "@/components/ui/dialog";
+} from "../components/ui/dialog";
 import {
 	Form,
 	FormControl,
@@ -15,9 +15,10 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from "../components/ui/form";
+import { Input } from "../components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Flight } from "../types/Flight";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -30,43 +31,52 @@ import {
 } from "../lib/features/bookmarks/bookmarksSlice";
 
 const formSchema = z.object({
-	boardingDate: z.string().min(1, "搭乗日は必須です"),
+  boardingDate: z.string().min(1, "搭乗日は必須です"),
   departure: z.string().min(1, "出発地は必須です"),
   destination: z.string().min(1, "目的地は必須です"),
   flightNumber: z.string().min(1, "便名は必須です"),
-  ticketPrice: z.string().min(1, "航空券代は必須です"),
+  ticketPrice: z.coerce.number({
+    required_error: "航空券代は必須です",
+    invalid_type_error: "有効な数字を入力してください"
+  }).positive("正の数を入力してください"),
   fareType: z.string().min(1, "運賃種別は必須です"),
-  otherExpenses: z.string().optional(),
-  earnedPP: z.string().min(1, "獲得PPは必須です"),
+  otherExpenses: z.coerce.number().optional(),
+  earnedPP: z.coerce.number({
+    required_error: "獲得PPは必須です", 
+    invalid_type_error: "有効な数字を入力してください"
+  }).positive("正の数を入力してください"),
   status: z.string().optional(),
 });
 
-export interface Bookmark {
-	id: string;
-	alias: string;
-	url: string;
-}
+// MEMO: 之后需要把下面的类型定义砍掉，换成types定义的航班信息
+type FormData = z.infer<typeof formSchema>;
+
 
 function Modal({
 	button,
-	title = "",
-	url = "",
+	flightData = {},
 	id = "",
 }: {
 	button: () => React.ReactNode;
-	title?: string;
-	url?: string;
+	flightData?: Partial<Flight>;
 	id?: string;
 }) {
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const router = useRouter();
 
 	const dispatch = useDispatch();
-	const form = useForm<z.infer<typeof formSchema>>({
+	const form = useForm<FormData>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			alias: title,
-			url: url,
+			boardingDate: flightData.boardingDate || "",
+			departure: flightData.departure || "東京 羽田",
+			destination: flightData.destination || "沖縄 那覇",
+			flightNumber: flightData.flightNumber || "",
+			ticketPrice: flightData.ticketPrice || undefined,
+			fareType: flightData.fareType || "",
+			otherExpenses: flightData.otherExpenses || undefined,
+			earnedPP: flightData.earnedPP || undefined,
+			status: flightData.status || "",
 		},
 	});
 
