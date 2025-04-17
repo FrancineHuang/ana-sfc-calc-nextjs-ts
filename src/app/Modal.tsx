@@ -30,12 +30,15 @@ import {
 } from "../lib/features/bookmarks/bookmarksSlice";
 
 const formSchema = z.object({
-	alias: z.string().max(50),
-	url: z.string().regex(
-		// https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
-		/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
-		"Invalid URL"
-	),
+	boardingDate: z.string().min(1, "搭乗日は必須です"),
+  departure: z.string().min(1, "出発地は必須です"),
+  destination: z.string().min(1, "目的地は必須です"),
+  flightNumber: z.string().min(1, "便名は必須です"),
+  ticketPrice: z.string().min(1, "航空券代は必須です"),
+  fareType: z.string().min(1, "運賃種別は必須です"),
+  otherExpenses: z.string().optional(),
+  earnedPP: z.string().min(1, "獲得PPは必須です"),
+  status: z.string().optional(),
 });
 
 export interface Bookmark {
