@@ -10,7 +10,7 @@ const initialState: FlightsState = {
 };
 
 export const flightsSlice = createSlice({
-	name: "bookmarks",
+	name: "flights",
 	initialState,
 	reducers: {
 		addFlight: (state, action: PayloadAction<Flight>) => {
@@ -32,9 +32,8 @@ export const flightsSlice = createSlice({
 	},
 });
 
-export const { addFlight } = flightsSlice.actions;
-export const { deleteFlight } = flightsSlice.actions;
-export const { editFlight } = flightsSlice.actions;
+export const { addFlight, deleteFlight, editFlight } = flightsSlice.actions;
+
 export const selectFlights = (state: { flights: FlightsState }) =>
 	state.flights.flights;
 

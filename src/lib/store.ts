@@ -18,7 +18,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-	bookmarks: persistReducer(persistConfig, flightsReducer),
+	flights: persistReducer(persistConfig, flightsReducer),
 });
 
 export const store = configureStore({
