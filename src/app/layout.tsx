@@ -13,7 +13,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: "SFC Calculator",
-	description: "A web application to calculate the premium points and simulate the flights",
+	description:
+		"A web application to calculate the premium points and simulate the flights",
 };
 
 export default function RootLayout({
