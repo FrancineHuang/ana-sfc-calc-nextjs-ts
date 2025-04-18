@@ -17,7 +17,9 @@ function Header() {
 						alt="logo"
 						className="mr-2"
 					/>
-					<a className="text-gray-50" href="/">SFC Calculator</a>
+					<a className="text-gray-50" href="/">
+						SFC Calculator
+					</a>
 				</div>
 				<div className="flex items-center gap-4">
 					<div className="flex">

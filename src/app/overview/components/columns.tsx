@@ -7,13 +7,13 @@ import TableActions from "./table-actions";
 
 // Formatting the numbers to Japanese currency
 const formatCurrency = (value: number | undefined) => {
-  if (value === undefined) return "";
-  return value.toLocaleString('ja-JP');
+	if (value === undefined) return "";
+	return value.toLocaleString("ja-JP");
 };
 
 export const columns: ColumnDef<Flight>[] = [
 	{
-    id: "boardingDate", 
+		id: "boardingDate",
 		header: "搭乗日",
 		size: 300,
 		cell: ({ row }) => {
@@ -24,8 +24,8 @@ export const columns: ColumnDef<Flight>[] = [
 			);
 		},
 	},
-  {
-    id: "departure", 
+	{
+		id: "departure",
 		header: "出発地",
 		size: 300,
 		cell: ({ row }) => {
@@ -36,8 +36,8 @@ export const columns: ColumnDef<Flight>[] = [
 			);
 		},
 	},
-  {
-    id: "destination",
+	{
+		id: "destination",
 		header: "目的地",
 		size: 300,
 		cell: ({ row }) => {
@@ -48,8 +48,8 @@ export const columns: ColumnDef<Flight>[] = [
 			);
 		},
 	},
-  {
-    id: "flightNumber",
+	{
+		id: "flightNumber",
 		header: "便名",
 		size: 300,
 		cell: ({ row }) => {
@@ -60,8 +60,8 @@ export const columns: ColumnDef<Flight>[] = [
 			);
 		},
 	},
-  {
-    id: "ticketPrice",
+	{
+		id: "ticketPrice",
 		header: "航空券代",
 		size: 300,
 		cell: ({ row }) => {
@@ -72,8 +72,8 @@ export const columns: ColumnDef<Flight>[] = [
 			);
 		},
 	},
-  {
-    id: "fareType",
+	{
+		id: "fareType",
 		header: "運賃種別",
 		size: 300,
 		cell: ({ row }) => {
@@ -84,20 +84,24 @@ export const columns: ColumnDef<Flight>[] = [
 			);
 		},
 	},
-  {
-    id: "otherExpenses",
+	{
+		id: "otherExpenses",
 		header: "その他費用",
 		size: 300,
 		cell: ({ row }) => {
 			return (
 				<div>
-					<p>{row.original.otherExpenses ? `${formatCurrency(row.original.otherExpenses)}円` : "-"}</p>
+					<p>
+						{row.original.otherExpenses
+							? `${formatCurrency(row.original.otherExpenses)}円`
+							: "-"}
+					</p>
 				</div>
 			);
 		},
 	},
-  {
-    id: "earnedPP",
+	{
+		id: "earnedPP",
 		header: "獲得PP",
 		size: 300,
 		cell: ({ row }) => {
@@ -108,8 +112,8 @@ export const columns: ColumnDef<Flight>[] = [
 			);
 		},
 	},
-  {
-    id: "status",
+	{
+		id: "status",
 		header: "ステータス",
 		size: 300,
 		cell: ({ row }) => {
@@ -120,8 +124,8 @@ export const columns: ColumnDef<Flight>[] = [
 			);
 		},
 	},
-  {
-    id: "ppUnitPrice",
+	{
+		id: "ppUnitPrice",
 		header: "PP単価",
 		size: 300,
 		cell: ({ row }) => {
@@ -133,13 +137,11 @@ export const columns: ColumnDef<Flight>[] = [
 		},
 	},
 	{
-    id: "action",
+		id: "action",
 		header: "",
 		size: 10,
 		cell: ({ row }) => {
-			return (
-				<TableActions {...row.original}/>
-			);
+			return <TableActions {...row.original} />;
 		},
 	},
 ];

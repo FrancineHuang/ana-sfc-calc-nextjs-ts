@@ -25,31 +25,31 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
-import {
-	addFlight,
-  editFlight,
-} from "../lib/features/flights/flightsSlice";
+import { addFlight, editFlight } from "../lib/features/flights/flightsSlice";
 
 const formSchema = z.object({
-  boardingDate: z.string().min(1, "搭乗日は必須です"),
-  departure: z.string().min(1, "出発地は必須です"),
-  destination: z.string().min(1, "目的地は必須です"),
-  flightNumber: z.string().min(1, "便名は必須です"),
-  ticketPrice: z.coerce.number({
-    required_error: "航空券代は必須です",
-    invalid_type_error: "有効な数字を入力してください"
-  }).positive("正の数を入力してください"),
-  fareType: z.string().min(1, "運賃種別は必須です"),
-  otherExpenses: z.coerce.number().optional(),
-  earnedPP: z.coerce.number({
-    required_error: "獲得PPは必須です", 
-    invalid_type_error: "有効な数字を入力してください"
-  }).positive("正の数を入力してください"),
-  status: z.string().optional(),
+	boardingDate: z.string().min(1, "搭乗日は必須です"),
+	departure: z.string().min(1, "出発地は必須です"),
+	destination: z.string().min(1, "目的地は必須です"),
+	flightNumber: z.string().min(1, "便名は必須です"),
+	ticketPrice: z.coerce
+		.number({
+			required_error: "航空券代は必須です",
+			invalid_type_error: "有効な数字を入力してください",
+		})
+		.positive("正の数を入力してください"),
+	fareType: z.string().min(1, "運賃種別は必須です"),
+	otherExpenses: z.coerce.number().optional(),
+	earnedPP: z.coerce
+		.number({
+			required_error: "獲得PPは必須です",
+			invalid_type_error: "有効な数字を入力してください",
+		})
+		.positive("正の数を入力してください"),
+	status: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
-
 
 function Modal({
 	button,
@@ -81,15 +81,15 @@ function Modal({
 
 	function onSubmit(values: z.infer<typeof formSchema>) {
 		const newId = id || uuidv4();
-    // Calculate the unit price of premium points
-    const totalCost = values.ticketPrice + (values.otherExpenses || 0);
-    const ppUnitPrice = totalCost / values.earnedPP;
+		// Calculate the unit price of premium points
+		const totalCost = values.ticketPrice + (values.otherExpenses || 0);
+		const ppUnitPrice = totalCost / values.earnedPP;
 
-		const newFlight: Flight = { 
-      ...values, 
-      id: newId,
-      ppUnitPrice: Number(ppUnitPrice.toFixed(2))
-    };
+		const newFlight: Flight = {
+			...values,
+			id: newId,
+			ppUnitPrice: Number(ppUnitPrice.toFixed(2)),
+		};
 
 		if (id && id.trim() !== "") {
 			// edit exisitng flight
@@ -106,9 +106,9 @@ function Modal({
 	return (
 		<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 			<DialogTrigger asChild>{button()}</DialogTrigger>
-			<DialogContent>
+			<DialogContent className="max-h-[80vh] overflow-y-auto">
 				<DialogHeader>
-					<DialogTitle className="mb-4"></DialogTitle>
+					<DialogTitle className="mb-4">フライトを追加</DialogTitle>
 					<Form {...form}>
 						<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 							{/* 搭乗日 Boarding Date */}
@@ -141,7 +141,7 @@ function Modal({
 								)}
 							/>
 
-              {/* 目的地 Destination */}
+							{/* 目的地 Destination */}
 							<FormField
 								control={form.control}
 								name="destination"
@@ -156,10 +156,10 @@ function Modal({
 								)}
 							/>
 
-              {/* 便名 Flight Number */}
+							{/* 便名 Flight Number */}
 							<FormField
 								control={form.control}
-								name="destination"
+								name="flightNumber"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>便名</FormLabel>
@@ -171,27 +171,33 @@ function Modal({
 								)}
 							/>
 
-              {/* 航空券代 Ticket Price */}
+							{/* 航空券代 Ticket Price */}
 							<FormField
 								control={form.control}
-								name="destination"
+								name="ticketPrice"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>航空券代</FormLabel>
 										<FormControl>
-											<Input 
-                        type="number"
-                        placeholder="例: 14900" 
-                        {...field} 
-                        onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
-                      />
+											<Input
+												type="number"
+												placeholder="例: 14900"
+												{...field}
+												onChange={(e) =>
+													field.onChange(
+														e.target.value === ""
+															? undefined
+															: Number(e.target.value)
+													)
+												}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
 
-              {/* 運賃種別 Fare Type */}
+							{/* 運賃種別 Fare Type */}
 							<FormField
 								control={form.control}
 								name="fareType"
@@ -206,27 +212,33 @@ function Modal({
 								)}
 							/>
 
-              {/* その他費用 Ticket Price */}
+							{/* その他費用 Other Expenses */}
 							<FormField
 								control={form.control}
-								name="destination"
+								name="otherExpenses"
 								render={({ field }) => (
 									<FormItem>
 										<FormLabel>その他費用</FormLabel>
 										<FormControl>
-											<Input 
-                        type="number"
-                        placeholder="例: 1180" 
-                        {...field} 
-                        onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
-                      />
+											<Input
+												type="number"
+												placeholder="例: 1180"
+												{...field}
+												onChange={(e) =>
+													field.onChange(
+														e.target.value === ""
+															? undefined
+															: Number(e.target.value)
+													)
+												}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
 
-              {/* 獲得PP Earned Premium Points */}
+							{/* 獲得PP Earned Premium Points */}
 							<FormField
 								control={form.control}
 								name="earnedPP"
@@ -234,19 +246,25 @@ function Modal({
 									<FormItem>
 										<FormLabel>獲得PP</FormLabel>
 										<FormControl>
-											<Input 
-                        type="number"
-                        placeholder="例: 1476" 
-                        {...field} 
-                        onChange={e => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
-                      />
+											<Input
+												type="number"
+												placeholder="例: 1476"
+												{...field}
+												onChange={(e) =>
+													field.onChange(
+														e.target.value === ""
+															? undefined
+															: Number(e.target.value)
+													)
+												}
+											/>
 										</FormControl>
 										<FormMessage />
 									</FormItem>
 								)}
 							/>
 
-              {/* ステータス Status */}
+							{/* ステータス Status */}
 							<FormField
 								control={form.control}
 								name="status"
@@ -261,7 +279,7 @@ function Modal({
 								)}
 							/>
 
-							<Button type="submit">Submit</Button>
+							<Button type="submit">保存する</Button>
 						</form>
 					</Form>
 				</DialogHeader>
