@@ -12,8 +12,9 @@ const ReduxProvider = dynamic(() => import("@/lib/redux-provider"), {
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "PocketLinks",
-	description: "",
+	title: "SFC Calculator",
+	description:
+		"A web application to calculate the premium points and simulate the flights",
 };
 
 export default function RootLayout({
@@ -24,13 +25,13 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<head>
-				<link rel="icon" href="/logo.png" sizes="any" />
+				<link rel="icon" href="/favicon.ico" sizes="any" />
 			</head>
 			<body className={inter.className}>
 				<ReduxProvider>
 					<ThemeProvider
 						attribute="class"
-						defaultTheme="dark"
+						defaultTheme="light"
 						enableSystem
 						disableTransitionOnChange
 					>

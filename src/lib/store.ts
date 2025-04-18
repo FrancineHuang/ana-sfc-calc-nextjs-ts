@@ -10,7 +10,7 @@ import {
 	persistStore,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import bookmarksReducer from "./features/bookmarks/bookmarksSlice";
+import flightsReducer from "./features/flights/flightsSlice";
 
 const persistConfig = {
 	key: "root",
@@ -18,7 +18,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-	bookmarks: persistReducer(persistConfig, bookmarksReducer),
+	flights: persistReducer(persistConfig, flightsReducer),
 });
 
 export const store = configureStore({

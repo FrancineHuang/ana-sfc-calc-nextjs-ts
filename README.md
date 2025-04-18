@@ -32,6 +32,7 @@ Install dependecies
 ```
 npm install
 ```
+
 or
 
 ```

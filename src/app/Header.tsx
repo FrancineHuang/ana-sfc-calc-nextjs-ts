@@ -17,22 +17,24 @@ function Header() {
 						alt="logo"
 						className="mr-2"
 					/>
-					<a href="/">PocketLinks</a>
+					<a className="text-gray-50" href="/">
+						SFC Calculator
+					</a>
 				</div>
 				<div className="flex items-center gap-4">
 					<div className="flex">
 						<Button asChild variant="link">
-							<Link href="/overview">Overview</Link>
+							<Link href="/overview">フライト一覧</Link>
 						</Button>
-						<Button variant="link">
-							<Link href="/howto">How To</Link>
+						<Button asChild variant="link">
+							<Link href="/howto">新規を追加</Link>
 						</Button>
-						<Button variant="link">
-							<Link href="/bin">Bin</Link>
+						<Button asChild variant="link">
+							<Link href="/bin">ゴミ箱</Link>
 						</Button>
 					</div>
 
-					<Modal button={() => <Button>Add New Link</Button>} />
+					<Modal button={() => <Button>新規フライトを追加</Button>} />
 				</div>
 			</div>
 		</div>
