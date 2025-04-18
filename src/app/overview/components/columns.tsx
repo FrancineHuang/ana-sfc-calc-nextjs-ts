@@ -1,11 +1,17 @@
 "use client";
 
-import { Bookmark } from "@/app/Modal";
+import { Flight } from "../../../types/Flight";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import TableActions from "./table-actions";
 
-export const columns: ColumnDef<Bookmark>[] = [
+// Formatting the numbers to Japanese currency
+const formatCurrency = (value: number | undefined) => {
+  if (value === undefined) return "";
+  return value.toLocaleString('ja-JP');
+};
+
+export const columns: ColumnDef<Flight>[] = [
 	{
     id: "boardingDate", 
 		header: "搭乗日",
@@ -13,9 +19,7 @@ export const columns: ColumnDef<Bookmark>[] = [
 		cell: ({ row }) => {
 			return (
 				<div>
-					<Link href={row.original.url} className="cursor-pointer">
-						{row.original.alias || row.original.url}
-					</Link>
+					<p>{row.original.boardingDate}</p>
 				</div>
 			);
 		},
@@ -27,7 +31,7 @@ export const columns: ColumnDef<Bookmark>[] = [
 		cell: ({ row }) => {
 			return (
 				<div>
-					<p>東京 羽田</p>
+					<p>{row.original.departure}</p>
 				</div>
 			);
 		},
@@ -39,7 +43,7 @@ export const columns: ColumnDef<Bookmark>[] = [
 		cell: ({ row }) => {
 			return (
 				<div>
-					<p>沖縄 那覇</p>
+					<p>{row.original.destination}</p>
 				</div>
 			);
 		},
@@ -51,7 +55,7 @@ export const columns: ColumnDef<Bookmark>[] = [
 		cell: ({ row }) => {
 			return (
 				<div>
-					<p>NH477</p>
+					<p>{row.original.flightNumber}</p>
 				</div>
 			);
 		},
@@ -63,7 +67,7 @@ export const columns: ColumnDef<Bookmark>[] = [
 		cell: ({ row }) => {
 			return (
 				<div>
-					<p>14,900</p>
+					<p>{formatCurrency(row.original.ticketPrice)}円</p>
 				</div>
 			);
 		},
@@ -75,7 +79,7 @@ export const columns: ColumnDef<Bookmark>[] = [
 		cell: ({ row }) => {
 			return (
 				<div>
-					<p>SV75</p>
+					<p>{row.original.fareType}</p>
 				</div>
 			);
 		},
@@ -87,7 +91,7 @@ export const columns: ColumnDef<Bookmark>[] = [
 		cell: ({ row }) => {
 			return (
 				<div>
-					<p>1,180円</p>
+					<p>{row.original.otherExpenses ? `${formatCurrency(row.original.otherExpenses)}円` : "-"}</p>
 				</div>
 			);
 		},
@@ -99,7 +103,7 @@ export const columns: ColumnDef<Bookmark>[] = [
 		cell: ({ row }) => {
 			return (
 				<div>
-					<p>1,476</p>
+					<p>{formatCurrency(row.original.earnedPP)}</p>
 				</div>
 			);
 		},
@@ -111,7 +115,7 @@ export const columns: ColumnDef<Bookmark>[] = [
 		cell: ({ row }) => {
 			return (
 				<div>
-					<p>1,476</p>
+					<p>{row.original.status}</p>
 				</div>
 			);
 		},
@@ -123,7 +127,7 @@ export const columns: ColumnDef<Bookmark>[] = [
 		cell: ({ row }) => {
 			return (
 				<div>
-					<p>10.09</p>
+					<p>{row.original.ppUnitPrice?.toFixed(2) || "-"}</p>
 				</div>
 			);
 		},
@@ -134,11 +138,7 @@ export const columns: ColumnDef<Bookmark>[] = [
 		size: 10,
 		cell: ({ row }) => {
 			return (
-				<TableActions
-					id={row.original.id}
-					alias={row.original.alias}
-					url={row.original.url}
-				/>
+				<TableActions {...row.original}/>
 			);
 		},
 	},
