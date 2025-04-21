@@ -1,7 +1,7 @@
 "use client";
 
-import Modal from "@/app/Modal";
-import { Flight } from "../../../types/Flight";
+import Modal from "@/components/layout/Modal";
+import { Flight } from "../../types/Flight";
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
