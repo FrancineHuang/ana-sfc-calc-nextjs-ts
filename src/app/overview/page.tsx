@@ -2,8 +2,8 @@
 
 import { selectFlights } from "@/lib/features/flights/flightsSlice";
 import { useSelector } from "react-redux";
-import { columns } from "./components/columns";
-import { DataTable } from "./components/data-table";
+import { columns } from "../../components/tables/columns";
+import { DataTable } from "../../components/tables/data-table";
 
 export default function Overview() {
 	const flights = useSelector(selectFlights);
