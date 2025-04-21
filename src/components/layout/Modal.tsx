@@ -1,13 +1,13 @@
 "use client";
 
-import { Button } from "../components/ui/button";
+import { Button } from "../ui/button";
 import {
 	Dialog,
 	DialogContent,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from "../components/ui/dialog";
+} from "../ui/dialog";
 import {
 	Form,
 	FormControl,
@@ -15,17 +15,17 @@ import {
 	FormItem,
 	FormLabel,
 	FormMessage,
-} from "../components/ui/form";
-import { Input } from "../components/ui/input";
+} from "../ui/form";
+import { Input } from "../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Flight } from "../types/Flight";
+import { Flight } from "../../types/Flight";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
-import { addFlight, editFlight } from "../lib/features/flights/flightsSlice";
+import { addFlight, editFlight } from "../../lib/features/flights/flightsSlice";
 
 const formSchema = z.object({
 	boardingDate: z.string().min(1, "搭乗日は必須です"),

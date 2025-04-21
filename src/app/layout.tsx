@@ -2,7 +2,7 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import type { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Inter } from "next/font/google";
-import Header from "./Header";
+import Header from "../components/layout/Header";
 import "./globals.css";
 
 const ReduxProvider = dynamic(() => import("@/lib/redux-provider"), {

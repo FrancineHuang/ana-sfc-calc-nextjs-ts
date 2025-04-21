@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import React from "react";
-import Modal from "../Modal";
+import Modal from "../../components/layout/Modal";
 
 // MEMO: I will temporally write a pure text on this page.
 // what I need? -> fix it to make it like a real tutorial page and have a clear description.

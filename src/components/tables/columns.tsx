@@ -1,6 +1,6 @@
 "use client";
 
-import { Flight } from "../../../types/Flight";
+import { Flight } from "../../types/Flight";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 import TableActions from "./table-actions";
