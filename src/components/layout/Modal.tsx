@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { addFlight, editFlight } from "../../lib/features/flights/flightsSlice";
+import { addFlight, editFlight, addFlightAsync } from "../../lib/features/flights/flightsSlice";
 import { FlightForm, FlightFormData } from "../flights/flight-form";
 
 function Modal({
@@ -45,23 +45,22 @@ function Modal({
           id,
           ppUnitPrice: Number(ppUnitPrice.toFixed(2)),
         };
-        await dispatch(editFlight(updatedFlight) as any);
+        dispatch(editFlight(updatedFlight));
       } else {
         // add new flight
         const newFlight: Omit<Flight, 'id'> = {
           ...values,
           ppUnitPrice: Number(ppUnitPrice.toFixed(2)),
         };
-        await dispatch(addFlight(newFlight) as any);
+        await dispatch(addFlightAsync(newFlight) as any)
         router.push("/results");
       }
-
       setIsDialogOpen(false);
-
     } catch (error) {
-
+      console.log('Failed to submit the form:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-    
   }
 
   return (
@@ -70,7 +69,11 @@ function Modal({
       <DialogContent className="max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="mb-4">フライトを追加</DialogTitle>
-          <FlightForm defaultValues={flightData} onSubmit={handleSubmit} />
+          <FlightForm
+            defaultValues={flightData} 
+            onSubmit={handleSubmit} 
+            isSubmitting={isSubmitting}
+          />
         </DialogHeader>
       </DialogContent>
     </Dialog>

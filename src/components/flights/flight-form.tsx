@@ -43,9 +43,10 @@ export type FlightFormData = z.infer<typeof formSchema>;
 interface FlightFormProps {
   defaultValues?: Partial<Flight>;
   onSubmit: (values: FlightFormData) => void;
+  isSubmitting?: boolean;
 }
 
-export function FlightForm({ defaultValues = {}, onSubmit }: FlightFormProps) {
+export function FlightForm({ defaultValues = {}, onSubmit, isSubmitting = false }: FlightFormProps) {
   const form = useForm<FlightFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -232,7 +233,9 @@ export function FlightForm({ defaultValues = {}, onSubmit }: FlightFormProps) {
           )}
         />
 
-        <Button type="submit">保存する</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          { isSubmitting ? "保存中" : "保存する..." }
+        </Button>
       </form>
     </Form>
   );
