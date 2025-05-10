@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { addFlight, editFlight } from "../../lib/features/flights/flightsSlice";
+import { addFlight, editFlight, addFlightAsync } from "../../lib/features/flights/flightsSlice";
 import { FlightForm, FlightFormData } from "../flights/flight-form";
 
 function Modal({
@@ -26,31 +26,41 @@ function Modal({
   id?: string;
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
 
-  function handleSubmit(values: FlightFormData) {
-    const newId = id || uuidv4();
-    // Calculate the unit price of premium points
-    const totalCost = values.ticketPrice + (values.otherExpenses || 0);
-    const ppUnitPrice = totalCost / values.earnedPP;
+  async function handleSubmit(values: FlightFormData) {
+    setIsSubmitting(true);
 
-    const newFlight: Flight = {
-      ...values,
-      id: newId,
-      ppUnitPrice: Number(ppUnitPrice.toFixed(2)),
-    };
+    try {
+      // Calculate the unit price of premium points
+      const totalCost = values.ticketPrice + (values.otherExpenses || 0);
+      const ppUnitPrice = totalCost / values.earnedPP;
 
-    if (id && id.trim() !== "") {
-      // edit existing flight
-      dispatch(editFlight(newFlight));
-    } else {
-      // add new flight
-      dispatch(addFlight(newFlight));
-      router.push("/results");
+      if (id && id.trim() !== "") {
+        // edit existing flight
+        const updatedFlight: Flight = {
+          ...values,
+          id,
+          ppUnitPrice: Number(ppUnitPrice.toFixed(2)),
+        };
+        dispatch(editFlight(updatedFlight));
+      } else {
+        // add new flight
+        const newFlight: Omit<Flight, 'id'> = {
+          ...values,
+          ppUnitPrice: Number(ppUnitPrice.toFixed(2)),
+        };
+        await dispatch(addFlightAsync(newFlight) as any)
+        router.push("/results");
+      }
+      setIsDialogOpen(false);
+    } catch (error) {
+      console.log('Failed to submit the form:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setIsDialogOpen(false);
   }
 
   return (
@@ -59,7 +69,11 @@ function Modal({
       <DialogContent className="max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="mb-4">フライトを追加</DialogTitle>
-          <FlightForm defaultValues={flightData} onSubmit={handleSubmit} />
+          <FlightForm
+            defaultValues={flightData} 
+            onSubmit={handleSubmit} 
+            isSubmitting={isSubmitting}
+          />
         </DialogHeader>
       </DialogContent>
     </Dialog>
