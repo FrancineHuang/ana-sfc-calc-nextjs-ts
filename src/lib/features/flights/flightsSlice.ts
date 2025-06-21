@@ -3,14 +3,14 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { flightAPI } from "../../api";
 
 interface FlightsState {
-	flights: Flight[];
+  flights: Flight[];
   trashedFlights: Flight[];
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null;
 }
 
 const initialState: FlightsState = {
-	flights: [],
+  flights: [],
   trashedFlights: [],
   loading: 'idle',
   error: null
@@ -24,7 +24,7 @@ export const fetchFlights = createAsyncThunk(
   }
 );
 
-export const fetchTrashedFlights =  createAsyncThunk(
+export const fetchTrashedFlights = createAsyncThunk(
   'flights/fetchTrashedFlights',
   async () => {
     return await flightAPI.getTrashedFlight();
@@ -41,7 +41,7 @@ export const addFlightAsync = createAsyncThunk(
 export const deleteFlightAsync = createAsyncThunk(
   'flights/deleteFlight',
   async (id: string) => {
-    await flightAPI.deteteFlight(id);
+    await flightAPI.deleteFlight(id);
     return id
   }
 );
@@ -53,36 +53,35 @@ export const restoreFlightAsync = createAsyncThunk(
   }
 )
 
-
 export const flightsSlice = createSlice({
-	name: "flights",
-	initialState,
-	reducers: {
-		addFlight: (state, action: PayloadAction<Flight>) => {
-			state.flights.push(action.payload);
-		},
-		deleteFlight: (state, action: PayloadAction<string>) => {
-			state.flights = state.flights.filter(
-				(flight) => flight.id !== action.payload
-			);
-		},
-		editFlight: (state, action: PayloadAction<Flight>) => {
-			const index = state.flights.findIndex(
-				(flight) => flight.id === action.payload.id
-			);
-			if (index === -1) return;
+  name: "flights",
+  initialState,
+  reducers: {
+    addFlight: (state, action: PayloadAction<Flight>) => {
+      state.flights.push(action.payload);
+    },
+    deleteFlight: (state, action: PayloadAction<string>) => {
+      state.flights = state.flights.filter(
+        (flight) => flight.id !== action.payload
+      );
+    },
+    editFlight: (state, action: PayloadAction<Flight>) => {
+      const index = state.flights.findIndex(
+        (flight) => flight.id === action.payload.id
+      );
+      if (index === -1) return;
 
-			state.flights[index] = { ...action.payload };
-		},
+      state.flights[index] = { ...action.payload };
+    },
     setError: (state, action: PayloadAction<string>) => {
       state.error = action.payload;
     },
     clearError: (state) => {
       state.error = null;
     }
-	},
+  },
   extraReducers: (builder) => {
-    // Operating fetchFlights
+    // Handle fetchFlights
     builder
       .addCase(fetchFlights.pending, (state) => {
         state.loading = 'pending';
@@ -96,51 +95,51 @@ export const flightsSlice = createSlice({
         state.error = action.error.message || 'Failed to fetch flights';
       })
 
-    // Operating fetchTrashedFlights
+    // Handle fetchTrashedFlights
       .addCase(fetchTrashedFlights.pending, (state) => {
         state.loading = 'pending';
       })
-      .addCase(fetchFlights.fulfilled, (state, action) => {
+      .addCase(fetchTrashedFlights.fulfilled, (state, action) => {
         state.loading = 'succeeded';
-        state.flights = action.payload;
+        state.trashedFlights = action.payload;
       })
-      .addCase(fetchFlights.rejected, (state, action) => {
+      .addCase(fetchTrashedFlights.rejected, (state, action) => {
         state.loading = 'failed';
-        state.error = action.error.message || 'Failed ro fetch the trashed flights';
+        state.error = action.error.message || 'Failed to fetch the trashed flights';
       })
 
-    // Operating addFlightAsync
+    // Handle addFlightAsync
       .addCase(addFlightAsync.fulfilled, (state, action) => {
         state.flights.push(action.payload);
       })
 
-    // Operating deleteFlightAsync
+    // Handle deleteFlightAsync
       .addCase(deleteFlightAsync.fulfilled, (state, action) => {
         state.flights = state.flights.filter(
           (flight) => flight.id !== action.payload
         );
       })
 
-    // Operating restoreFlightAsync
+    // Handle restoreFlightAsync
       .addCase(restoreFlightAsync.fulfilled, (state, action) => {
         state.trashedFlights = state.trashedFlights.filter(
           (flight) => flight.id !== action.payload.id
         );
         state.flights.push(action.payload);
-      })
+      });
   }
 });
 
-export const { 
-  addFlight, 
-  deleteFlight, 
+export const {
+  addFlight,
+  deleteFlight,
   editFlight,
   setError,
   clearError
 } = flightsSlice.actions;
 
 export const selectFlights = (state: { flights: FlightsState }) =>
-	state.flights.flights;
+  state.flights.flights;
 
 export const selectTrashedFlights = (state: { flights: FlightsState }) =>
   state.flights.trashedFlights;
@@ -148,7 +147,7 @@ export const selectTrashedFlights = (state: { flights: FlightsState }) =>
 export const selectLoading = (state: { flights: FlightsState }) =>
   state.flights.loading;
 
-export const selectError  = (state: { flights: FlightsState }) =>
+export const selectError = (state: { flights: FlightsState }) =>
   state.flights.error;
 
 export default flightsSlice.reducer;
