@@ -38,11 +38,15 @@ function Modal({
       const totalCost = values.ticketPrice + (values.otherExpenses || 0);
       const ppUnitPrice = totalCost / values.earnedPP;
 
+      // Convert status to boolean
+      const processedStatus = Boolean(values.status);
+
       if (id && id.trim() !== "") {
         // edit existing flight
         const updatedFlight: Flight = {
           ...values,
           id,
+          status: processedStatus,
           ppUnitPrice: Number(ppUnitPrice.toFixed(2)),
         };
         dispatch(editFlight(updatedFlight));
@@ -50,6 +54,7 @@ function Modal({
         // add new flight
         const newFlight: Omit<Flight, 'id'> = {
           ...values,
+          status: processedStatus,
           ppUnitPrice: Number(ppUnitPrice.toFixed(2)),
         };
         await dispatch(addFlightAsync(newFlight) as any)

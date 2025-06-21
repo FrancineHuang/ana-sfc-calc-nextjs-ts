@@ -8,6 +8,6 @@ export interface Flight {
 	fareType: string;
 	otherExpenses?: number;
 	earnedPP: number;
-	status?: string;
+	status?: boolean;
 	ppUnitPrice?: number;
 }
