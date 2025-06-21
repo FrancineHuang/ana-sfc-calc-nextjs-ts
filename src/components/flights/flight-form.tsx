@@ -35,7 +35,7 @@ const formSchema = z.object({
       invalid_type_error: "有効な数字を入力してください",
     })
     .positive("正の数を入力してください"),
-  status: z.string().optional(),
+  status: z.boolean().optional().default(false),
 });
 
 export type FlightFormData = z.infer<typeof formSchema>;
@@ -43,9 +43,10 @@ export type FlightFormData = z.infer<typeof formSchema>;
 interface FlightFormProps {
   defaultValues?: Partial<Flight>;
   onSubmit: (values: FlightFormData) => void;
+  isSubmitting?: boolean;
 }
 
-export function FlightForm({ defaultValues = {}, onSubmit }: FlightFormProps) {
+export function FlightForm({ defaultValues = {}, onSubmit, isSubmitting = false }: FlightFormProps) {
   const form = useForm<FlightFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -57,7 +58,7 @@ export function FlightForm({ defaultValues = {}, onSubmit }: FlightFormProps) {
       fareType: defaultValues.fareType || "",
       otherExpenses: defaultValues.otherExpenses || undefined,
       earnedPP: defaultValues.earnedPP || undefined,
-      status: defaultValues.status || "",
+      status: defaultValues.status ?? false,
     },
   });
 
@@ -225,14 +226,23 @@ export function FlightForm({ defaultValues = {}, onSubmit }: FlightFormProps) {
             <FormItem>
               <FormLabel>ステータス</FormLabel>
               <FormControl>
-                <Input placeholder="例: 未 / 済" {...field} />
+                <select
+                  value={String(field.value)}
+                  onChange={(e) => field.onChange(e.target.value === 'true')}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2"
+                >
+                  <option value="false">未搭乗</option>
+                  <option value="true">搭乗済</option>
+                </select>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit">保存する</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          { isSubmitting ? "保存中" : "保存する..." }
+        </Button>
       </form>
     </Form>
   );
